@@ -6,6 +6,8 @@ export default function Home() {
   return (
     <main>
         <SearchBoxComponent />
+        <FilterBoxComponent />
+        <ListPokemonComponent />
     </main>
   );
 }
