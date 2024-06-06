@@ -22,13 +22,13 @@ const useClasses = makeStyles({
 
 function SearchBoxComponent() {
   const {
+    filterStore: { PokemonType, PokemonAbility, PokemonMove },
     pokemonStore: { setSearchPokemon },
   } = useStores();
   const classes = useClasses()
   return (
     <div className={classes.SearchContainer}>
-      <SearchBox className={classes.SearchBox} size='large' appearance="outline" placeholder="Search by name" onKeyUp={(e) => setSearchPokemon((e.target as HTMLInputElement).value) } />
-      
+      <SearchBox className={classes.SearchBox} size='large' appearance="outline" placeholder="Search by name" onChange={(e) => setSearchPokemon((e.target as HTMLInputElement).value, PokemonType, PokemonAbility, PokemonMove) } />
     </div>
   );
 }

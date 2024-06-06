@@ -3,6 +3,6 @@
   "plugins":["mobx"],
   "extends":["plugin:mobx/recommended","next/core-web-vitals"],
   "rules": {
-    "mobx/missing-observer" : "off",
+    "mobx/missing-observer" : "off"
   }
 }
