@@ -34,6 +34,7 @@ function PokemonTypeOption() {
       <div>
         <Label size="small" weight="semibold" className={classes.LabelContainer} id={comboId}>Pokemon Type</Label>
         <Combobox
+          clearable
           listbox={{ className: classes.listbox }}
           positioning={"below"}
           onOptionSelect={onOptionSelect}

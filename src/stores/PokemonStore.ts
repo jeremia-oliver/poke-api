@@ -29,7 +29,10 @@ class PokemonStore {
         this.PokemonResults?.results.forEach((e) => {
             const explodeUrl = e.url.split("/")
             const pokemonID = parseInt(explodeUrl[6]);
+            
+            runInAction(() => {
             this.ListPokemon.push({id: pokemonID, name:e.name.toUpperCase(), url:e.url, display:true})
+            })
         });
         runInAction(() => {
         this.isLoading = false;
@@ -38,12 +41,14 @@ class PokemonStore {
 
     setSearchPokemon = (param:string, type:string, ability:string, move:string) => {
         param = typeof param === 'undefined' ? "" : param;
+        runInAction(() => {
         this.SearchPokemon = param;
         this.ListPokemon = this.ListPokemon.map(obj => {
             const newObj = Object.assign({}, obj);
             newObj.display = (obj.name).toLowerCase().includes(param.toLowerCase(), 0);
             return newObj;
         });
+        })
         runInAction(() => { this.filterPokemon(type, ability, move) })
     };
 

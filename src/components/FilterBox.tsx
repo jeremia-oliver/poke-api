@@ -30,7 +30,7 @@ const FilterBoxContent = observer(() => {
   const classes = useClasses();
   const {
     filterStore: { PokemonType, PokemonAbility, PokemonMove },
-    pokemonStore: { setSearchPokemon }
+    pokemonStore: { setSearchPokemon, SearchPokemon }
   } = useStores();
 
   return (
@@ -38,7 +38,7 @@ const FilterBoxContent = observer(() => {
       <PokemonTypeOption />
       <PokemonAbilityOption />
       <PokemonMoveOption />
-      <Button className={classes.FilterButton} appearance="primary" onClick={(e) => setSearchPokemon("",PokemonType, PokemonAbility, PokemonMove )}>Filter</Button>
+      <Button className={classes.FilterButton} appearance="primary" onClick={(e) => setSearchPokemon(SearchPokemon,PokemonType, PokemonAbility, PokemonMove )}>Filter</Button>
     </div>
   );
 });

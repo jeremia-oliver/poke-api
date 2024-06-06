@@ -48,6 +48,14 @@ const useClasses = makeStyles({
     textAlign:"center",
     paddingTop:"100px",
     paddingBottom:"20vh"
+  },
+  CountPokemon:{
+    fontFamily:tokens.fontFamilyBase,
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+    lineHeight: tokens.lineHeightBase200,
+    color:tokens.colorNeutralForeground4,
+    textAlign:"center",
   }
 })
 
@@ -57,13 +65,16 @@ function ListPokemonComponent() {
     pokemonStore: { isLoading, ListPokemon, PokemonResults },
   } = useStores();
   const CountDisplay = ListPokemon.filter(e => e.display).length
-  if(!PokemonResults || CountDisplay == 0) return <h2 className={classes.NotFound}>Pokemon Not Found</h2>
+  if(isLoading) return (
+    <div className={ classes.loadingScreen }>
+      <Spinner className="loader" size="huge" /><br />
+      Loading...
+    </div>
+  )
   return (
     <div>
-      <div className={ isLoading ? classes.loadingScreen : classes.ColHidden }>
-        <Spinner size="huge" /><br />
-        Loading...
-      </div>
+      <h2 className={!PokemonResults || CountDisplay == 0 ? classes.NotFound : classes.ColHidden }>Pokemon Not Found</h2>
+      <div className={ isLoading || CountDisplay == 0 ? classes.ColHidden : classes.CountPokemon }>Displaying {CountDisplay} Pokemon</div>
       <div className={ isLoading ? classes.ColHidden : classes.FlexContainer}>
         {
           ListPokemon.map(p => {
