@@ -150,7 +150,7 @@ function ListPokemonComponent() {
                       <tr>
                         <td>URL</td>
                         <td>:</td>
-                        <td className={classes.tableBreakWord}>{ p.url }</td>
+                        <td>{ p.url }</td>
                       </tr>
                       <tr>
                         <td>Image</td>
