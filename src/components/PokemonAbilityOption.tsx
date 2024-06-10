@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import { makeStyles, Combobox, useComboboxFilter, useId, ComboboxProps,Label  } from '@fluentui/react-components';
+import { makeStyles, Combobox, useComboboxFilter, useId, ComboboxProps,Label, tokens  } from '@fluentui/react-components';
 import { useStores } from "@/hooks/useStore";
 import { observer } from 'mobx-react';
 
@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 const useClasses = makeStyles({
   LabelContainer:{
     display:"block",
-    marginTop:"10px"
+    marginTop:tokens.spacingVerticalMNudge
   },
   listbox:{
     maxHeight:"200px"

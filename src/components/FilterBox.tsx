@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import { makeStyles, Button, Popover, PopoverSurface,PopoverTrigger, Combobox, useComboboxFilter, useId, ComboboxProps,Label  } from '@fluentui/react-components';
+import { makeStyles, Button, Popover, PopoverSurface,PopoverTrigger, tokens  } from '@fluentui/react-components';
 import { FilterFilled } from '@fluentui/react-icons';
 import { useStores } from "@/hooks/useStore";
 import { observer } from 'mobx-react';
@@ -18,11 +18,11 @@ const useClasses = makeStyles({
   },
   LabelContainer:{
     display:"block",
-    marginBottom:"10px"
+    marginBottom:tokens.spacingVerticalMNudge
   },
   FilterButton:{
     display:"block",
-    marginTop:"20px"
+    marginTop:tokens.spacingVerticalXL
   }
 })
 

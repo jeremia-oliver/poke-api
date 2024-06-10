@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-// const URL = 'http://localhost:3000/'
-const URL = 'https://poke-api-one-eta.vercel.app/'
+const URL = 'http://localhost:3000/'
+//const URL = 'https://poke-api-one-eta.vercel.app/'
 
 test.describe('Test Poke API Website', () => {
   test.beforeEach(async ({ page }) => {

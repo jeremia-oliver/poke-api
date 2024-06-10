@@ -3,22 +3,23 @@ import fetchPokemon from "@/lib/fetchPokemon";
 import { fetchTypeDetails, fetchAbilityDetails, fetchMoveDetails } from '@/lib/fetchDetail';
 import type { PokemonResults } from "@/models/Pokemons";
 import type { TypeResults, AbilityResults, MoveResults } from "@/models/Details";
+import Master from "../api/MasterType.json";
 
 // DEFAULT STATE
 class PokemonStore {
-    isLoading: boolean = true;
+    isLoading: boolean = false;
     SearchPokemon: string = '';
     PokemonResults: PokemonResults | undefined;
-    ListPokemon: {id:number, name:string, url:string, display:boolean}[] = [];
+    ListPokemon: {id:number, name:string, url:string, type:string[]|undefined, display:boolean}[] = [];
     TypeResults: TypeResults | undefined;
     AbilityResults: AbilityResults | undefined;
     MoveResults: MoveResults | undefined;
+    MasterType: {name:string, type:string[]}[] = Master.Types;
 
     constructor() {
         makeAutoObservable(this);
         runInAction(this.fetchPokemon);
     }
-
 
     fetchPokemon = async () => {
         const url = "https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0"
@@ -29,9 +30,10 @@ class PokemonStore {
         this.PokemonResults?.results.forEach((e) => {
             const explodeUrl = e.url.split("/")
             const pokemonID = parseInt(explodeUrl[6]);
+            const pokemonType = this.MasterType.find((el) => { return el.name == e.name})?.type
             
             runInAction(() => {
-            this.ListPokemon.push({id: pokemonID, name:e.name.toUpperCase(), url:e.url, display:true})
+            this.ListPokemon.push({id: pokemonID, name:e.name.toUpperCase(), url:e.url, type:pokemonType, display:true})
             })
         });
         runInAction(() => {
