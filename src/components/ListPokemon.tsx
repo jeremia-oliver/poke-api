@@ -103,7 +103,7 @@ const useClasses = makeStyles({
 function ListPokemonComponent() {
   const classes = useClasses();
   const {
-    pokemonStore: { isLoading, ListPokemon, PokemonResults, MasterType },
+    pokemonStore: { isLoading, ListPokemon, PokemonResults },
   } = useStores();
   const CountDisplay = ListPokemon.filter(e => e.display).length
   if(isLoading) return (

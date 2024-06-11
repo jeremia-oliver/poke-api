@@ -13,6 +13,7 @@ class FilterStore {
     PokemonMove: string = '';
     MoveResults: PokemonResults | undefined;
     ListMove: {children:string, value:string}[] = [];
+    ListFilter: {type:string, ability:string, move:string} = { type:"", ability:"", move:"" }
 
     constructor() {
         makeAutoObservable(this);
@@ -59,6 +60,14 @@ class FilterStore {
     setPokemonMove = (param:string) => {
         runInAction(() => {this.PokemonMove = param; })
     };
+
+    setListFilter = (type:string, ability:string, move:string) => {
+        runInAction(() => {
+            this.ListFilter.type = type;
+            this.ListFilter.ability = ability;
+            this.ListFilter.move = move;    
+        })
+    }
 
     
  

@@ -8,6 +8,7 @@ import Master from "../api/MasterType.json";
 // DEFAULT STATE
 class PokemonStore {
     isLoading: boolean = false;
+    isSearch: boolean = false;
     SearchPokemon: string = '';
     PokemonResults: PokemonResults | undefined;
     ListPokemon: {id:number, name:string, url:string, type:string[]|undefined, display:boolean}[] = [];
