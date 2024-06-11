@@ -31,12 +31,15 @@ const useClasses = makeStyles({
     marginTop:tokens.spacingVerticalXL
   },
   TagContainer:{
-    display:"inline-block",
+    display:"block",
+    overflowX:"auto",
+    marginBottom:tokens.spacingVerticalSNudge,
     marginTop:tokens.spacingVerticalSNudge,
     fontSize:tokens.fontSizeBase200,
     '@media screen and (min-width:768px)':{
       display:"flex",
       marginTop:"0px",
+      marginBottom:"0px",
     }
   }
 })
