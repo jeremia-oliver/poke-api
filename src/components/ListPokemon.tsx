@@ -33,8 +33,12 @@ const useClasses = makeStyles({
   },
   ColContainerImage:{
     width:"100%",
-    height:"122px",
-    background:tokens.colorNeutralBackground1Selected
+    height:"132px",
+    background:tokens.colorNeutralBackground1Selected,
+    marginBottom:tokens.spacingVerticalSNudge
+  },
+  ColImage:{
+    height:"100%",
   },
   ColHidden:{
     display:"none"
@@ -119,11 +123,14 @@ function ListPokemonComponent() {
               <Popover key={p.name} positioning={"above"} withArrow>
                 <PopoverTrigger disableButtonEnhancement>
                   <div className={ p.display ? classes.ColContainer : classes.ColHidden }>
+                    <div className={classes.ColContainerImage}>
                     <Image
-                      className={classes.ColContainerImage}
+                      data-testid="images"
+                      className={classes.ColImage}
                       alt={p.name}
                       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`}
                     />
+                    </div>
                     <span className={classes.PokemonId}># { p.id }</span>
                     <span className={classes.PokemonName}>{ p.name.replace("-"," ") }</span>
                     <div  className={classes.PokemonType}>

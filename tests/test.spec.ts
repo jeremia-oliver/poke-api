@@ -9,13 +9,8 @@ test.describe('Test Poke API Website', () => {
   });
 
   test('Showing all pokemon image to be visible', async ({ page }) => {
-    test.setTimeout(150000)
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
-    let images = page.locator("img")
-    await expect(images).toHaveCount(1025)
-    for (const image of await images.all()) {
-      await expect(image).toBeVisible();
-    }
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(1025,{ timeout: 150000 })
   });
 });
 
@@ -28,6 +23,7 @@ test.describe('Test Search Function', () => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await page.getByPlaceholder("Search by name").fill('saur')
     await expect(page.getByText('saur')).toHaveCount(3)
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(3)
   });
 
 });
@@ -38,36 +34,36 @@ test.describe('Test Filter Function', () => {
   });
 
   test('Showing pokemon based on type filter', async ({ page }) => {
-    test.setTimeout(150000)
-    await expect(page.getByText('Loading...')).toBeHidden()
+    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select a type').click();
     await page.getByRole('option', { name: 'NORMAL' }).click();
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 131 Pokemon")).toBeVisible()
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(131)
   });
 
   test('Showing pokemon based on abilty filter', async ({ page }) => {
-    test.setTimeout(150000)
-    await expect(page.getByText('Loading...')).toBeHidden()
+    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select an ability').click();
     await page.getByRole('option', { name: 'LIMBER', exact: true  }).click();
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 14 Pokemon")).toBeVisible()
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(14)
   });
 
   test('Showing pokemon based on move filter', async ({ page }) => {
-    test.setTimeout(150000)
-    await expect(page.getByText('Loading...')).toBeHidden()
+    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select a move').click();
     await page.getByRole('option', { name: 'KARATE CHOP', exact: true  }).click();
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 11 Pokemon")).toBeVisible()
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(11)
   });
 
 });
@@ -82,6 +78,7 @@ test.describe('Test Failed Search and Filter Function', () => {
     await page.getByPlaceholder("Search by name").fill('notmatch')
     await expect(page.getByText('notmatch')).toHaveCount(0)
     await expect(page.getByText("Pokemon Not Found")).toHaveCount(1)
+    await expect(page.locator("img:visible")).toHaveCount(0)
   });
   
   test('Showing not found if no pokemon match filter value', async ({ page }) => {
@@ -97,6 +94,7 @@ test.describe('Test Failed Search and Filter Function', () => {
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Pokemon Not Found")).toHaveCount(1)
+    await expect(page.locator("img:visible")).toHaveCount(0)
   });
 
 });
