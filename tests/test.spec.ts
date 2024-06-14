@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-const URL = 'http://localhost:3000/'
-//const URL = 'https://poke-api-one-eta.vercel.app/'
+// const URL = 'http://localhost:3000/'
+const URL = 'https://poke-api-one-eta.vercel.app/'
 
 test.describe('Test Poke API Website', () => {
   test.beforeEach(async ({ page }) => {
@@ -23,7 +23,7 @@ test.describe('Test Search Function', () => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await page.getByPlaceholder("Search by name").fill('saur')
     await expect(page.getByText('saur')).toHaveCount(3)
-    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(3)
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(3,{ timeout: 150000 })
   });
 
 });
@@ -41,7 +41,7 @@ test.describe('Test Filter Function', () => {
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 131 Pokemon")).toBeVisible()
-    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(131)
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(131,{ timeout: 150000 })
   });
 
   test('Showing pokemon based on abilty filter', async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe('Test Filter Function', () => {
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 14 Pokemon")).toBeVisible()
-    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(14)
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(14,{ timeout: 150000 })
   });
 
   test('Showing pokemon based on move filter', async ({ page }) => {
@@ -63,7 +63,7 @@ test.describe('Test Filter Function', () => {
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
     await expect(page.getByText("Displaying 11 Pokemon")).toBeVisible()
-    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(11)
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(11,{ timeout: 150000 })
   });
 
 });
