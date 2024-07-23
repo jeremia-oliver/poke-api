@@ -1,4 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import fetchOptions from "@/lib/fetchOptions";
+import type { OptionsResults } from "@/models/Options";
 import fetchPokemon from "@/lib/fetchPokemon";
 import type { PokemonResults } from "@/models/Pokemons";
 
@@ -17,33 +19,26 @@ class FilterStore {
 
     constructor() {
         makeAutoObservable(this);
-        runInAction(this.fetchPokemonType);
-        runInAction(this.fetchPokemonAbility);
-        runInAction(this.fetchPokemonMove);
+        runInAction(this.fetchPokemonOption);
     }
 
-    fetchPokemonType = async () => {
-        const url = "https://pokeapi.co/api/v2/type?limit=18&offset=0"
-        this.TypeResults = await fetchPokemon(url);
-        this.TypeResults?.results.forEach((e) => {
+    fetchPokemonOption = async () => {
+        const url   = "https://func-ause-pokeapi-jere.azurewebsites.net/api/option"
+        // const url = "http://localhost:7071/api/option"
+        const Results:OptionsResults | undefined = await fetchOptions(url);
+        this.TypeResults = Results?.TYPE;
+        this.AbilityResults = Results?.ABILITY;
+        this.MoveResults = Results?.MOVE;
+
+        Results?.TYPE.results.forEach((e) => {
             const names = e.name.toUpperCase()
             this.ListType.push({children:names, value:names})
         });
-    }
-
-    fetchPokemonAbility = async () => {
-        const url = "https://pokeapi.co/api/v2/ability?limit=367&offset=0"
-        this.AbilityResults = await fetchPokemon(url);
-        this.AbilityResults?.results.forEach((e) => {
+        Results?.ABILITY.results.forEach((e) => {
             const names = e.name.replace("-"," ").toUpperCase()
             this.ListAbility.push({children:names, value:names})
         });
-    }
-
-    fetchPokemonMove = async () => {
-        const url = "https://pokeapi.co/api/v2/move?limit=937&offset=0"
-        this.MoveResults = await fetchPokemon(url);
-        this.MoveResults?.results.forEach((e) => {
+        Results?.MOVE.results.forEach((e) => {
             const names = e.name.replace("-"," ").toUpperCase()
             this.ListMove.push({children:names, value:names})
         });

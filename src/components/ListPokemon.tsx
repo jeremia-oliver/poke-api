@@ -3,11 +3,12 @@
 import { observer } from "mobx-react";
 import { useStores } from "@/hooks/useStore";
 import { makeStyles, Image, Spinner, tokens, Popover, PopoverTrigger, PopoverSurface } from '@fluentui/react-components';
+import Pagination from "./Pagination";
 
 const useClasses = makeStyles({
   FlexContainer:{
     display:"grid",
-    paddingBottom: "100px",
+    paddingBottom: "50px",
     gridTemplateColumns: "50% 50%",
     width:"90%",
     maxWidth:"1000px",
@@ -103,9 +104,8 @@ const useClasses = makeStyles({
 function ListPokemonComponent() {
   const classes = useClasses();
   const {
-    pokemonStore: { isLoading, ListPokemon, PokemonResults },
+    pokemonStore: { isLoading, ListPokemon, PokemonResults, TotalItems },
   } = useStores();
-  const CountDisplay = ListPokemon.filter(e => e.display).length
   if(isLoading) return (
     <div className={ classes.loadingScreen }>
       <Spinner className="loader" size="huge" /><br />
@@ -114,11 +114,12 @@ function ListPokemonComponent() {
   )
   return (
     <div>
-      <h2 className={!PokemonResults || CountDisplay == 0 ? classes.NotFound : classes.ColHidden }>Pokemon Not Found</h2>
-      <div className={ isLoading || CountDisplay == 0 ? classes.ColHidden : classes.CountPokemon }>Displaying {CountDisplay} Pokemon</div>
+      <h2 className={!PokemonResults || TotalItems == 0 ? classes.NotFound : classes.ColHidden }>Pokemon Not Found</h2>
+      <div className={ isLoading || TotalItems == 0 ? classes.ColHidden : classes.CountPokemon }>Displaying {TotalItems} Pokemon</div>
       <div className={ isLoading ? classes.ColHidden : classes.FlexContainer}>
         {
           ListPokemon.map(p => {
+            if(p.id<10000){
             return (
               <Popover key={p.name} positioning={"above"} withArrow>
                 <PopoverTrigger disableButtonEnhancement>
@@ -170,9 +171,11 @@ function ListPokemonComponent() {
                 </PopoverSurface>
               </Popover>
             )
+            }
           })
         }
       </div>
+      <Pagination />
     </div>
   );
 }

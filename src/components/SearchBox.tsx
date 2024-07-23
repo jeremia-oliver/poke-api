@@ -1,8 +1,8 @@
 "use client"
-
 import { makeStyles, SearchBox, tokens } from '@fluentui/react-components';
 import { useStores } from "@/hooks/useStore";
 import { observer } from 'mobx-react';
+import React, {useState, useEffect} from 'react';
 
 const useClasses = makeStyles({
   SearchBackground:{
@@ -34,15 +34,26 @@ const useClasses = makeStyles({
 })
 
 function SearchBoxComponent() {
+  
+  const [searchTerm, setSearchTerm] = useState('')
   const {
     filterStore: { PokemonType, PokemonAbility, PokemonMove },
-    pokemonStore: { setSearchPokemon },
+    pokemonStore: { setSearchPokemon, isLoading },
   } = useStores();
   const classes = useClasses()
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      // console.log(searchTerm)
+      setSearchPokemon(searchTerm, PokemonType, PokemonAbility, PokemonMove);
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchTerm])
+
   return (
     <div className={classes.SearchBackground}>
     <div className={classes.SearchContainer}>
-      <SearchBox className={classes.SearchBox} size='large' appearance="outline" placeholder="Search by name" onChange={(e) => setSearchPokemon((e.target as HTMLInputElement).value, PokemonType, PokemonAbility, PokemonMove) } />
+      <SearchBox className={classes.SearchBox} size='large' appearance="outline" placeholder="Search by name" onChange={(e) => setSearchTerm((e.target as HTMLInputElement).value) }  disabled={ isLoading }/>
     </div>
     </div>
   );

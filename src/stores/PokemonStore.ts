@@ -5,11 +5,27 @@ import type { PokemonResults } from "@/models/Pokemons";
 import type { TypeResults, AbilityResults, MoveResults } from "@/models/Details";
 import Master from "../api/MasterType.json";
 
+type RequestParam = {
+    page:number,
+    filter:{
+        search:string,
+        type:string,
+        ability:string,
+        move:string,
+    } | null
+}
 // DEFAULT STATE
 class PokemonStore {
+    page : number = 1;
+    items : number = 20;
     isLoading: boolean = false;
     isSearch: boolean = false;
+    TotalPage : number = 0;
+    TotalItems : number = 0;
     SearchPokemon: string = '';
+    TypePokemon: string = '';
+    AbilityPokemon: string = '';
+    MovePokemon:string = '';
     PokemonResults: PokemonResults | undefined;
     ListPokemon: {id:number, name:string, url:string, type:string[]|undefined, display:boolean}[] = [];
     TypeResults: TypeResults | undefined;
@@ -19,15 +35,19 @@ class PokemonStore {
 
     constructor() {
         makeAutoObservable(this);
-        runInAction(this.fetchPokemon);
+        runInAction(() => {
+            this.fetchPokemon({page:1, filter:null})
+        });
     }
 
-    fetchPokemon = async () => {
-        const url = "https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0"
+    fetchPokemon = async (params:RequestParam) => {
+        const url   = "https://func-ause-pokeapi-jere.azurewebsites.net/api/pokemon"
+        // const url = "http://localhost:7071/api/pokemon"
         runInAction(() => {
-        this.isLoading = true;
+            this.isLoading = true;
+            this.ListPokemon = [];
         })
-        this.PokemonResults = await fetchPokemon(url);
+        this.PokemonResults = await fetchPokemon(url, params);
         this.PokemonResults?.results.forEach((e) => {
             const explodeUrl = e.url.split("/")
             const pokemonID = parseInt(explodeUrl[6]);
@@ -38,80 +58,50 @@ class PokemonStore {
             })
         });
         runInAction(() => {
+        this.TotalItems = !this.PokemonResults ? 0 : (this.PokemonResults.count > 1025 ? 1025 : this.PokemonResults.count);
+        this.TotalPage = this.TotalItems > 0 ? Math.ceil(this.TotalItems / this.items) : 0;
         this.isLoading = false;
         })
     }
 
     setSearchPokemon = (param:string, type:string, ability:string, move:string) => {
-        param = typeof param === 'undefined' ? "" : param;
         runInAction(() => {
-        this.SearchPokemon = param;
-        this.ListPokemon = this.ListPokemon.map(obj => {
-            const newObj = Object.assign({}, obj);
-            newObj.display = (obj.name).toLowerCase().includes(param.toLowerCase(), 0);
-            return newObj;
-        });
+            this.SearchPokemon = param;
+            this.filterPokemon(type, ability, move)
         })
-        runInAction(() => { this.filterPokemon(type, ability, move) })
     };
 
     filterPokemon = async (type:string, ability:string, move:string) => {
-        runInAction(() => {
-            this.isLoading = true;
-        })
-        const FilterArray = [
-            { endpoint: 'type', value: type.toLowerCase().replace(" ","-") },
-            { endpoint: 'ability', value: ability.toLowerCase().replace(" ","-") },
-            { endpoint: 'move', value: move.toLowerCase().replace(" ","-") },
-        ]
-        for(const e of FilterArray){
-            if(e.value != ""){
-                const url = `https://pokeapi.co/api/v2/${e.endpoint}/${e.value}`;
-                if(e.endpoint == 'type'){
-                    const thisArray:string[] = []
-                    this.TypeResults = await fetchTypeDetails(url);
-                    this.TypeResults?.pokemon.forEach((e) => {
-                        thisArray.push(e.pokemon.name)
-                    });
-                    runInAction(() => {
-                    this.ListPokemon = this.ListPokemon.map(obj => {
-                        const newObj = Object.assign({}, obj);
-                        newObj.display = newObj.display ? thisArray.includes(obj.name.toLowerCase(), 0) : false;
-                        return newObj;
-                    });
-                    })
-                }else if(e.endpoint == 'ability'){
-                    const thisArray:string[] = []
-                    this.AbilityResults = await fetchAbilityDetails(url);
-                    this.AbilityResults?.pokemon.forEach((e) => {
-                        thisArray.push(e.pokemon.name)
-                    });
-                    runInAction(() => {
-                    this.ListPokemon = this.ListPokemon.map(obj => {
-                        const newObj = Object.assign({}, obj);
-                        newObj.display = newObj.display ? thisArray.includes(obj.name.toLowerCase(), 0) : false;
-                        return newObj;
-                    });
-                    })
-                }else if(e.endpoint == 'move'){
-                    const thisArray:string[] = []
-                    this.MoveResults = await fetchMoveDetails(url);
-                    this.MoveResults?.learned_by_pokemon.forEach((e) => {
-                        thisArray.push(e.name)
-                    });
-                    runInAction(() => {
-                    this.ListPokemon = this.ListPokemon.map(obj => {
-                        const newObj = Object.assign({}, obj);
-                        newObj.display = newObj.display ? thisArray.includes(obj.name.toLowerCase(), 0) : false;
-                        return newObj;
-                    });
-                    })
-                }
-            }  
+        const filterRequest = {
+            search: this.SearchPokemon,
+            type: type.toLowerCase().replace(" ","-"),
+            ability:ability.toLowerCase().replace(" ","-"),
+            move: move.toLowerCase().replace(" ","-")
         }
-        
-        runInAction(() => { this.isLoading = false; })
-       
+        runInAction(() => {
+            this.page = 1
+            this.TypePokemon = type.toLowerCase().replace(" ","-");
+            this.AbilityPokemon = ability.toLowerCase().replace(" ","-");
+            this.MovePokemon = move.toLowerCase().replace(" ","-");
+            this.fetchPokemon({page:1, filter:filterRequest});
+        });
+    }
+
+    handlePaging = (page:number) => {
+        let filterRequest = null;
+        if(this.SearchPokemon != '' || this.TypePokemon != '' || this.AbilityPokemon != '' || this.MovePokemon != ''){
+            filterRequest = {
+                search: this.SearchPokemon,
+                type: this.TypePokemon,
+                ability:this.AbilityPokemon,
+                move: this.MovePokemon
+            }
+        }
+        runInAction(() => {
+            this.page = page
+            this.fetchPokemon({page:page, filter:filterRequest});
+        });
+
     }
  
 }
