@@ -57,6 +57,7 @@ test.describe('Test Filter Function', () => {
 
   test('Showing pokemon based on type filter', async ({ page }) => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
+    await expect(page.getByRole('button', { name: 'Filter' })).toBeEnabled();
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select a type').click();
     await page.getByRole('option', { name: 'NORMAL' }).click();
@@ -68,6 +69,7 @@ test.describe('Test Filter Function', () => {
 
   test('Showing pokemon based on abilty filter', async ({ page }) => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
+    await expect(page.getByRole('button', { name: 'Filter' })).toBeEnabled();
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select an ability').click();
     await page.getByRole('option', { name: 'LIMBER', exact: true  }).click();
@@ -79,6 +81,7 @@ test.describe('Test Filter Function', () => {
 
   test('Showing pokemon based on move filter', async ({ page }) => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
+    await expect(page.getByRole('button', { name: 'Filter' })).toBeEnabled();
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select a move').click();
     await page.getByRole('option', { name: 'KARATE CHOP', exact: true  }).click();
@@ -105,7 +108,7 @@ test.describe('Test Failed Search and Filter Function', () => {
   
   test('Showing not found if no pokemon match filter value', async ({ page }) => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
-    
+    await expect(page.getByRole('button', { name: 'Filter' })).toBeEnabled();
     await page.getByRole('button', { name: 'Filter' }).click();
     await page.getByPlaceholder('Select a type').click();
     await page.getByRole('option', { name: 'GROUND' }).click();

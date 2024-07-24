@@ -16,6 +16,9 @@ const useClasses = makeStyles({
   ButtonSpacing:{
     marginLeft:"5px",
     marginRight:"5px"
+  },
+  ColHidden:{
+    display:"none"
   }
 })
 
@@ -29,7 +32,7 @@ function PaginationComponent() {
         handlePaging(v)
     }
     return (
-        <div className={classes.PaginationContainer}>
+        <div className={ TotalPage == 0 ? classes.ColHidden : classes.PaginationContainer}>
             
             <Button title="Jump to First Page" size="medium" icon={<ArrowPreviousRegular />} className={classes.ButtonSpacing} disabled={ page == 1 } onClick={ (e) => ButtonClick(1) }/>
             <Button title="Previous Page" size="medium" icon={<ChevronLeftRegular />} className={classes.ButtonSpacing} disabled={ page == 1 } onClick={ (e) => ButtonClick(page - 1) }/>
