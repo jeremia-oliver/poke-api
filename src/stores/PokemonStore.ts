@@ -54,7 +54,6 @@ class PokemonStore {
             this.ListPokemon.push({id: pokemonID, name:e.name.toUpperCase(), url:e.url, type:pokemonType, display:true})
             })
         });
-        console.log(this.PokemonResults);
         runInAction(() => {
         this.TotalItems = !this.PokemonResults ? 0 : (this.PokemonResults.count > 1025 ? 1025 : this.PokemonResults.count);
         this.TotalPage = this.TotalItems > 0 ? Math.ceil(this.TotalItems / this.items) : 0;

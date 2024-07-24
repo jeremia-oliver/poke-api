@@ -68,7 +68,7 @@ const FilterBoxContent = observer(() => {
 function FilterBoxComponent() {
   const classes = useClasses();  
   const {
-    filterStore: { ListFilter, PokemonType, PokemonAbility, PokemonMove, setListFilter, setPokemonType, setPokemonAbility, setPokemonMove },
+    filterStore: { optionLoading, ListFilter, PokemonType, PokemonAbility, PokemonMove, setListFilter, setPokemonType, setPokemonAbility, setPokemonMove },
     pokemonStore: { setSearchPokemon, SearchPokemon }
   } = useStores();
   
@@ -90,8 +90,8 @@ function FilterBoxComponent() {
   return (
     <div className={classes.FilterContainer}>
       <Popover positioning={"below-end"} trapFocus>
-        <PopoverTrigger disableButtonEnhancement>
-          <Button icon={<FilterFilled />}>Filter</Button>
+        <PopoverTrigger disableButtonEnhancement >
+          <Button disabled={optionLoading} icon={<FilterFilled />}>Filter</Button>
         </PopoverTrigger>
         <PopoverSurface tabIndex={-1}>
           <FilterBoxContent />

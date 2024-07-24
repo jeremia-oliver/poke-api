@@ -6,6 +6,7 @@ import type { PokemonResults } from "@/models/Pokemons";
 
 // DEFAULT STATE
 class FilterStore {
+    optionLoading: boolean = false;
     PokemonType: string = '';
     TypeResults: PokemonResults | undefined;
     ListType: {children:string, value:string}[] = [];
@@ -23,6 +24,9 @@ class FilterStore {
     }
 
     fetchPokemonOption = async () => {
+        runInAction(() => {
+            this.optionLoading = true;
+        })
         const url   = "https://func-ause-pokeapi-jere.azurewebsites.net/api/option"
         // const url = "http://localhost:7071/api/option"
         const Results:OptionsResults | undefined = await fetchOptions(url);
@@ -42,6 +46,9 @@ class FilterStore {
             const names = e.name.replace("-"," ").toUpperCase()
             this.ListMove.push({children:names, value:names})
         });
+        runInAction(() => {
+            this.optionLoading = false;
+        })
     }
 
     setPokemonType = (param:string) => {
