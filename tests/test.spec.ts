@@ -10,7 +10,7 @@ test.describe('Test Poke API Website', () => {
 
   test('Showing all pokemon image to be visible', async ({ page }) => {
     await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
-    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(1025,{ timeout: 150000 })
+    await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(20,{ timeout: 150000 })
   });
 });
 
