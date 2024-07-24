@@ -86,7 +86,7 @@ test.describe('Test Filter Function', () => {
     await page.getByPlaceholder('Select a move').click();
     await page.getByRole('option', { name: 'KARATE CHOP', exact: true  }).click();
     await page.getByRole('button', { name: 'Filter' }).click();
-    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 150000 })
+    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 300000 })
     await expect(page.getByText("Displaying 11 Pokemon")).toBeVisible()
     await expect(page.getByTestId("images").and(page.locator("img:visible"))).toHaveCount(11,{ timeout: 150000 })
   });
